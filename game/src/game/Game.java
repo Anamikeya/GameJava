@@ -16,11 +16,13 @@ public class Game extends Canvas implements Runnable {
 	public static int width = 300;
 	public static int height = width / 16 * 9;
 	public static int scale = 3;
+	public static String title = "Pain";
 	
 	public static boolean running = false;
 	
 	private Thread thread;
 	private JFrame frame;
+	private Keyboard key;
 	private Screen screen;
 	private BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 	private int[] pixels = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
@@ -31,6 +33,10 @@ public class Game extends Canvas implements Runnable {
 		
 		frame = new JFrame();
 		screen = new Screen(width, height);  
+		
+		key = new Keyboard();
+		addKeyListener(key);
+		
 	}
 	public synchronized void start(){
 		running = true;
@@ -71,14 +77,20 @@ public class Game extends Canvas implements Runnable {
 			if(System.currentTimeMillis() - timer > 1000) {
 				timer+= 1000;
 				System.out.println(updates+ " ups," + frames+ " fps" );
+				frame.setTitle(title + " | "+ updates+ " ups," + frames+ " fps");
 				frames=0;
 				updates = 0;
 			}
 		}
 		stop();
 	}
-	
+	int x,y;
 	public void update() {
+		key.update();
+		if(key.up) y--;
+		if(key.down) y++;
+		if(key.left) x--;
+		if(key.right) x++;
 		
 	}
 	public void render() {
@@ -89,10 +101,12 @@ public class Game extends Canvas implements Runnable {
 			return;
 		}
 		screen.clear();
-		screen.render();
+		screen.render(x,y);
 		for(int i = 0; i< pixels.length; i++) {
 			pixels[i] = screen.pixels[i];
+			
 		}
+		
 		Graphics g = bs.getDrawGraphics();
 		g.setColor(new Color(0,0,0));
 		g.fillRect(0, 0, getWidth(), getHeight());
@@ -107,7 +121,7 @@ public class Game extends Canvas implements Runnable {
 		// TODO Auto-generated method stub
 		Game game = new Game();
 		game.frame.setResizable(false);
-		game.frame.setTitle("Pain");
+		game.frame.setTitle(Game.title);
 		game.frame.add(game);
 		game.frame.pack();
 		game.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
