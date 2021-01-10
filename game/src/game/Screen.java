@@ -30,13 +30,12 @@ public class Screen {
 		
 		
 		for(int y = 0; y < height; y++) {
-			int yy = y + yoffset;
-			if(y >= height || y<0) break;
+			int yp = y + yoffset;
+			if(yp<0||yp>=height) continue;
 			for(int x = 0; x < width; x++) {
-				int xx=x+xoffset;
-				if(x >= width || x < 0) break;
-				int tileIndex = ((xx >> 3) & MAP_SIZE_MASK ) + ((yy >> 3) & MAP_SIZE_MASK ) * MAP_SIZE;
-				pixels[x+y*width] = tiles[tileIndex];
+				int xp = x+xoffset;	
+				if(xp<0||xp>=width) continue;
+				pixels[xp+yp*width] = Sprite.grass.pixels[(x&15)+(y &15)*Sprite.grass.SIZE];
 			}
 		}
 		
