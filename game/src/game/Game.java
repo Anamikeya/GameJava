@@ -10,6 +10,9 @@ import java.awt.image.DataBufferInt;
 
 import javax.swing.JFrame;
 
+import game.level.Level;
+import game.level.RandomLevel;
+
 public class Game extends Canvas implements Runnable {
 	private static final long serialVersionUID  = 1L;
 	
@@ -24,6 +27,7 @@ public class Game extends Canvas implements Runnable {
 	private JFrame frame;
 	private Keyboard key;
 	private Screen screen;
+	private Level level;
 	private BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 	private int[] pixels = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
 	
@@ -35,7 +39,10 @@ public class Game extends Canvas implements Runnable {
 		screen = new Screen(width, height);  
 		
 		key = new Keyboard();
+		level = new RandomLevel(64,64);
+		
 		addKeyListener(key);
+		
 		
 	}
 	public synchronized void start(){
@@ -102,7 +109,8 @@ public class Game extends Canvas implements Runnable {
 			return;
 		}
 		screen.clear();
-		screen.render(x,y);
+		level.render(x, y, screen);
+		
 		for(int i = 0; i< pixels.length; i++) {
 			pixels[i] = screen.pixels[i];
 			

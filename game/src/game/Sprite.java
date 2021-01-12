@@ -8,7 +8,8 @@ public class Sprite {
 	public int[] pixels;
 	private SpriteSheet sheet;
 	
-	public static Sprite grass = new Sprite(16,0,0,SpriteSheet.tiles);
+	public static Sprite grass = new Sprite(16,0,0,SpriteSheet.tiles);//size is 16 the 0 0 is the stating point in the thei the tiles
+	public static Sprite voidSprite = new Sprite(16,0x1B87E0);//size is 16 color is black
 	
 	public Sprite(int size, int x, int y, SpriteSheet sheet) {
 	this.SIZE = size;
@@ -18,6 +19,17 @@ public class Sprite {
 	this.sheet = sheet;
 	load();
 			
+	}
+	public Sprite(int size, int colour) {
+		SIZE = size;
+		pixels = new int[size*size]; 
+		setColour(colour);
+	}
+	private void setColour(int colour) {
+		for(int i = 0; i< SIZE*SIZE ; i++) {
+			pixels[i] = colour;
+		}
+		
 	}
 	public void load() {
 		for(int y = 0; y < SIZE; y++) {
